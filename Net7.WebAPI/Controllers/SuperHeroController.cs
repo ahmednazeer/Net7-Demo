@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
         private static List<SuperHero> superHerolsLst = new List<SuperHero> {
             new SuperHero
             {
-                Id = 2,
+                Id = 1,
                 Name = "Spider man",
                 FirstName = "Peter",
                 LastName = "Parker",
@@ -30,6 +30,28 @@ namespace WebAPI.Controllers
             var hero= superHerolsLst.Find(x => x.Id == id);
             if(hero is null)
                 return NotFound("sorry , we can not find this here");
+            return Ok(superHerolsLst);
+        }
+        [HttpPost]
+
+        public async Task<ActionResult<SuperHero>> AddSuperHerro([FromBody] SuperHero hero)
+        {
+            superHerolsLst.Add(hero);
+            return Created(string.Empty,hero);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<SuperHero>> GetHero(int id,SuperHero superHero)
+        {
+            var hero = superHerolsLst.Find(x => x.Id == id);
+            if (hero is null)
+                return NotFound("sorry , we can not find this here");
+
+            hero.Name = superHero.Name;
+            hero.FirstName = superHero.FirstName;
+            hero.LastName = superHero.LastName;
+            hero.Place = superHero.Place;
+
             return Ok(superHerolsLst);
         }
 
