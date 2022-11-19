@@ -41,7 +41,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<SuperHero>> GetHero(int id,SuperHero superHero)
+        public async Task<ActionResult<SuperHero>> UpdateHero(int id,SuperHero superHero)
         {
             var hero = superHerolsLst.Find(x => x.Id == id);
             if (hero is null)
@@ -54,6 +54,15 @@ namespace WebAPI.Controllers
 
             return Ok(superHerolsLst);
         }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<SuperHero>> DeleteHero(int id)
+        {
+            var hero = superHerolsLst.Find(x => x.Id == id);
 
+            if (hero is null)
+                return NotFound("sorry , we can not delete this here");
+
+            return Ok(superHerolsLst.Remove(hero);
+        }
     }
 }
