@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core;
+using Core.contracts;
+using Heplers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Net7Demo.Models;
 
@@ -18,51 +21,53 @@ namespace WebAPI.Controllers
                 Place = "New york"
             }
         };
+        private readonly ISuperHeroCoreService _superHeroCoreService;
+        public SuperHeroController(ISuperHeroCoreService superHeroCoreService)
+        {
+            _superHeroCoreService = superHeroCoreService;
+        }
+        
+
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> GetAllHeros()
         {
-            return Ok(superHerolsLst);
+            var allHerosResult = _superHeroCoreService.GetAllHeros();
+            return Ok(allHerosResult);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SuperHero>> GetHero(int id)
         {
-            var hero= superHerolsLst.Find(x => x.Id == id);
+            var hero= _superHeroCoreService.GetHero(id);
             if(hero is null)
-                return NotFound("sorry , we can not find this here");
+                return NotFound(ErrorMessages.NotFoundHero);
             return Ok(superHerolsLst);
         }
         [HttpPost]
 
         public async Task<ActionResult<SuperHero>> AddSuperHerro([FromBody] SuperHero hero)
         {
-            superHerolsLst.Add(hero);
+            var heroResult= _superHeroCoreService.AddSuperHerro(hero);
             return Created(string.Empty,hero);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<SuperHero>> UpdateHero(int id,SuperHero superHero)
         {
-            var hero = superHerolsLst.Find(x => x.Id == id);
+            var hero = _superHeroCoreService.UpdateHero(id,superHero);
             if (hero is null)
-                return NotFound("sorry , we can not find this here");
-
-            hero.Name = superHero.Name;
-            hero.FirstName = superHero.FirstName;
-            hero.LastName = superHero.LastName;
-            hero.Place = superHero.Place;
+                return NotFound(ErrorMessages.NotFoundHero);
 
             return Ok(superHerolsLst);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<SuperHero>> DeleteHero(int id)
         {
-            var hero = superHerolsLst.Find(x => x.Id == id);
-
+            var hero = _superHeroCoreService.DeleteHero(id);
             if (hero is null)
-                return NotFound("sorry , we can not delete this here");
+                return NotFound(ErrorMessages.FailedToDeleteHero);
 
-            return Ok(superHerolsLst.Remove(hero);
+            return Ok(hero);
         }
     }
 }
