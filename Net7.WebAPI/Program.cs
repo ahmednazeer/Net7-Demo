@@ -1,5 +1,9 @@
 using Core;
 using Core.contracts;
+using Dal;
+using Dal.contracts;
+using Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //core services
 builder.Services.AddScoped<ISuperHeroCoreService, SuperHeroCoreService>();
-
+builder.Services.AddDbContext<SuperHeroContext>(options => options.UseSqlServer(""));
+//DAL services
+builder.Services.AddScoped<IHeroServiceDal, HeroServiceDal>();
 
 var app = builder.Build();
 

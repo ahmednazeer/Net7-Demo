@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.contracts
+namespace Dal.contracts
 {
-    public interface ISuperHeroCoreService
+    public interface IHeroServiceDal
     {
-        Task<List<SuperHero>> GetAllHeros();
+        Task<SuperHero> AddHero(SuperHero modle);
+        Task<List<SuperHero>> GetHeros();
         Task<SuperHero?> GetHero(int id);
-        Task<SuperHero?> AddSuperHerro(SuperHero hero);
-        Task<SuperHero?> UpdateHero(int id, SuperHero superHero);
         Task<SuperHero?> DeleteHero(int id);
+        Task<SuperHero?> UpdateteHero(int id,SuperHero superHero);
     }
 }
